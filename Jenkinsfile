@@ -1,10 +1,6 @@
 pipeline {
     agent any
 
-    tools {
-        python 'Python3'  // Make sure Python is set up in Jenkins Global Tools
-    }
-
     environment {
         VENV_DIR = 'venv'
     }
@@ -30,22 +26,21 @@ pipeline {
             }
         }
 
-        stage('Run Analysis') {
+        stage('Run Analysis Script') {
             steps {
-                // Run your main Python script or Jupyter Notebook conversion
-                sh '. $VENV_DIR/bin/activate && python EDA_Project.ipynb'
-                // OR if using Jupyter Notebook:
-                // sh '. $VENV_DIR/bin/activate && jupyter nbconvert --execute your_notebook.ipynb'
+                sh '. $VENV_DIR/bin/activate && jupyter nbconvert --execute --inplace EDA_Project.ipynb'
+
+                // Replace "analysis.py" with your actual script name
             }
         }
     }
 
     post {
         success {
-            echo '✅ Analysis completed successfully.'
+            echo '✅ Data Analysis Completed Successfully!'
         }
         failure {
-            echo '❌ Analysis failed. Check console output.'
+            echo '❌ Pipeline Failed. Please check console output.'
         }
     }
 }
